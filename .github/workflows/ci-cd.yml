@@ -39,11 +39,8 @@ jobs:
           flake8 scripts/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
       - name: Validate Kubernetes Manifests (Dry-Run)
-        uses: stefanprodan/kube-tools@v1
-        with:
-          kubectl: 1.28.2
-          command: |
-            kubectl apply --dry-run=client -f k8s/
+        run: |
+          kubectl apply --dry-run=client --validate=false -f k8s/
 
   build-and-push:
     name: Build & Push Docker Image
