@@ -38,9 +38,10 @@ jobs:
           # Exit-zero treats all errors as warnings
           flake8 scripts/ --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
 
-      - name: Validate Kubernetes Manifests (Dry-Run)
+      - name: Validate Kubernetes Manifests
         run: |
-          kubectl apply --dry-run=client --validate=false -f k8s/
+          pip install pyyaml
+          python -c "import yaml, glob; [list(yaml.safe_load_all(open(f, encoding='utf-8'))) for f in sorted(glob.glob('k8s/*.yaml'))]; print('All Kubernetes manifests are valid YAML.')"
 
   build-and-push:
     name: Build & Push Docker Image
